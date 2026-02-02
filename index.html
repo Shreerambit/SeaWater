@@ -1,255 +1,555 @@
-<!-- Shreeram Bhajantri, [1/31/2026 6:53 PM] -->
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Personal portfolio of Shreeram Bhajantri, a BCA student aspiring to be a software developer and competitive exam aspirant.">
-    <meta name="keywords" content="Shreeram Bhajantri, BCA, Software Developer, Competitive Exams, YouTube Creator">
-    <!-- Open Graph Tags -->
-    <meta property="og:title" content="Shreeram Bhajantri - Portfolio">
-    <meta property="og:description" content="Aspiring Software Developer and Competitive Exam Aspirant">
-    <meta property="og:image" content="assets/images/profile.jpg"> <!-- Placeholder -->
-    <meta property="og:url" content="https://yourusername.github.io/portfolio">
-    <meta property="og:type" content="website">
+    <meta name="description" content="SeaWater: Custom-branded drinking water bottles for shops, bakeries, hotels, and more. Promote your brand with pure water at wholesale prices.">
+    <title>SeaWater - Custom Branded Drinking Water Bottles</title>
+    <!-- SEO Optimizations -->
+    <meta name="keywords" content="custom water bottles, branded drinking water, wholesale water, shop branding, pure water">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://seawater.com/">
     <!-- Favicon -->
-    <link rel="icon" href="assets/icons/favicon.ico" type="image/x-icon"> <!-- Placeholder -->
-    <title>Shreeram Bhajantri - Portfolio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💧</text></svg>">
+    <!-- Tailwind CSS CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Three.js CDN for 3D rendering -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- GSAP CDN for animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <style>
+        /* Custom CSS for water-themed effects and overrides */
+        body {
+            font-family: 'Inter', sans-serif; /* Modern sans-serif */
+            background-color: #FFFFFF;
+            color: #0A6EFF;
+            scroll-behavior: smooth;
+        }
+        .water-ripple {
+            background: radial-gradient(circle, rgba(0,229,255,0.2) 0%, rgba(10,110,255,0) 70%);
+            animation: ripple 2s infinite;
+        }
+        @keyframes ripple {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+        .droplet {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #00E5FF;
+            border-radius: 50%;
+            animation: drop 1s infinite;
+        }
+        @keyframes drop {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(20px); opacity: 0; }
+        }
+        /* Parallax effect */
+        .parallax {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        /* Button micro-interactions */
+        .cta-button {
+            transition: all 0.3s ease;
+        }
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(0,229,255,0.5);
+        }
+    </style>
+    <!-- Google Fonts for typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
-<body>
-    <!-- Preloader -->
-    <div id="preloader">
-        <div class="spinner"></div>
-    </div>
+<body class="antialiased">
 
-    <!-- Scroll Progress -->
-    <div id="scroll-progress"></div>
-
-    <!-- Header/Navbar -->
-    <header id="header">
-        <nav class="navbar">
-            <div class="container">
-                <a href="#" class="logo">Shreeram Bhajantri</a>
-                <ul class="nav-links">
-                    <li><a href="#home" class="active">Home</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#skills">Skills</a></li>
-                    <li><a href="#projects">Projects</a></li>
-                    <li><a href="#exams">Exams</a></li>
-                    <li><a href="#youtube">YouTube</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-                <div class="mode-toggle">
-                    <button id="theme-toggle" aria-label="Toggle Dark Mode">
-                        <span class="icon">🌙</span>
-                    </button>
-                </div>
-                <div class="hamburger" aria-label="Toggle Menu">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
+    <!-- Hero Section: Full-screen with 3D bottle -->
+    <section id="hero" class="relative h-screen flex items-center justify-center bg-gradient-to-b from-[#0A6EFF] to-[#00E5FF] text-white overflow-hidden">
+        <!-- Water ripple background -->
+        <div class="absolute inset-0 water-ripple"></div>
+        <!-- Random droplets -->
+        <div class="droplet" style="left: 20%; top: 10%; animation-delay: 0s;"></div>
+        <div class="droplet" style="left: 50%; top: 30%; animation-delay: 0.5s;"></div>
+        <div class="droplet" style="left: 80%; top: 20%; animation-delay: 1s;"></div>
+        
+        <div class="container mx-auto text-center z-10">
+            <h1 class="text-5xl md:text-7xl font-bold mb-4">Your Brand. Your Bottle.</h1>
+            <p class="text-xl md:text-2xl mb-8">Promote your shop with custom-branded pure drinking water.</p>
+            <!-- 3D Bottle Canvas -->
+            <div id="threejs-hero" class="w-full h-64 md:h-96 mx-auto"></div>
+            <!-- CTA Buttons -->
+            <div class="flex justify-center space-x-4">
+                <a href="#builder" class="cta-button bg-white text-[#0A6EFF] px-6 py-3 rounded-full font-bold">Create Your Bottle</a>
+                <a href="#contact" class="cta-button bg-transparent border-2 border-white px-6 py-3 rounded-full font-bold">Become a Partner Shop</a>
             </div>
-        </nav>
-    </header>
+        </div>
+    </section>
 
-    <main>
-        <!-- Hero Section -->
-        <section id="home" class="hero section">
-            <div class="container">
-                <h1>BCA Student | Aspiring Software Developer | Competitive Exam Aspirant</h1>
-                <p>Hello, I'm Shreeram Bhajantri from India. I'm building my technical foundations while preparing for government exams and creating educational content.</p>
-                <div class="cta-buttons">
-                    <a href="#projects" class="btn primary">View Projects</a>
-                    <a href="resume.pdf" class="btn secondary" download>Download Resume</a>
+    <!-- How It Works Section: Animated steps -->
+    <section id="how-it-works" class="py-20 bg-[#EAEAEA]">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-12">How It Works</h2>
+            <div class="grid md:grid-cols-5 gap-8">
+                <!-- Step 1 -->
+                <div class="text-center animate-step" data-step="1">
+                    <div class="bg-[#0A6EFF] text-white w-16 h-16 mx-auto rounded-full flex items-center justify-center text-2xl font-bold mb-4">1</div>
+                    <p class="font-bold">Choose Bottle Size</p>
                 </div>
-            </div>
-        </section>
-
-        <!-- About Section -->
-        <section id="about" class="about section reveal">
-            <div class="container">
-                <h2>About Me</h2>
-                <div class="about-content">
-                    <p>I'm Shreeram Bhajantri, a BCA student from India with a strong academic background, including good marks in 10th and 12th. I'm passionate about programming, operating systems, databases, and ethical hacking. Currently in the early semesters of BCA, I'm focusing on building solid technical foundations.</p>
-                    <p>My interests include AI tools, automation, graphic design, and digital content creation. My career goal is to become a skilled software/IT professional, create educational and tech-related digital products, and qualify for competitive government exams alongside my IT growth.</p>
-
-<!-- Shreeram Bhajantri, [1/31/2026 6:53 PM] -->
-<div class="education">
-                        <h3>Education</h3>
-                        <ul>
-                            <li>Bachelor of Computer Applications (BCA) - Currently studying (early semesters)</li>
-                            <li>Strong academic background with good marks in 10th & 12th</li>
-                        </ul>
-                    </div>
+                <!-- Step 2 -->
+                <div class="text-center animate-step" data-step="2">
+                    <div class="bg-[#0A6EFF] text-white w-16 h-16 mx-auto rounded-full flex items-center justify-center text-2xl font-bold mb-4">2</div>
+                    <p class="font-bold">Upload Shop Logo/Name</p>
+                </div>
+                <!-- Step 3 -->
+                <div class="text-center animate-step" data-step="3">
+                    <div class="bg-[#0A6EFF] text-white w-16 h-16 mx-auto rounded-full flex items-center justify-center text-2xl font-bold mb-4">3</div>
+                    <p class="font-bold">Customize Label & Shape</p>
+                </div>
+                <!-- Step 4 -->
+                <div class="text-center animate-step" data-step="4">
+                    <div class="bg-[#0A6EFF] text-white w-16 h-16 mx-auto rounded-full flex items-center justify-center text-2xl font-bold mb-4">4</div>
+                    <p class="font-bold">Confirm Quantity</p>
+                </div>
+                <!-- Step 5 -->
+                <div class="text-center animate-step" data-step="5">
+                    <div class="bg-[#0A6EFF] text-white w-16 h-16 mx-auto rounded-full flex items-center justify-center text-2xl font-bold mb-4">5</div>
+                    <p class="font-bold">We Manufacture & Deliver</p>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Skills Section -->
-        <section id="skills" class="skills section reveal">
-            <div class="container">
-                <h2>Skills</h2>
-                <div class="skills-grid">
-                    <div class="skill-category">
-                        <h3>Programming</h3>
-                        <ul>
-                            <li>C (arrays, recursion, sorting algorithms)</li>
-                            <li>JavaScript</li>
-                        </ul>
+    <!-- Custom Bottle Builder Section: Interactive 3D -->
+    <section id="builder" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-12">Build Your Custom Bottle</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Controls -->
+                <div class="space-y-6">
+                    <div>
+                        <label class="block font-bold mb-2">Shop Name</label>
+                        <input id="shop-name" type="text" placeholder="Enter your shop name" class="w-full px-4 py-2 border rounded">
                     </div>
-                    <div class="skill-category">
-                        <h3>Core CS</h3>
-                        <ul>
-                            <li>Computer Fundamentals</li>
-                            <li>Operating Systems (Process, Memory, Scheduling, IPC, Multithreading)</li>
-                            <li>DBMS basics</li>
-                        </ul>
+                    <div>
+                        <label class="block font-bold mb-2">Upload Logo</label>
+                        <input id="logo-upload" type="file" accept="image/*" class="w-full">
                     </div>
-                    <div class="skill-category">
-                        <h3>Web</h3>
-                        <ul>
-                            <li>HTML</li>
-                            <li>CSS</li>
-                            <li>JavaScript (beginner to intermediate)</li>
-                        </ul>
+                    <div>
+                        <label class="block font-bold mb-2">Label Color</label>
+                        <input id="label-color" type="color" value="#0A6EFF" class="w-full h-10">
                     </div>
-                    <div class="skill-category">
-                        <h3>Tools</h3>
-                        <ul>
-                            <li>GitHub</li>
-                            <li>Kali Linux (basics for ethical hacking)</li>
-                        </ul>
+                    <div>
+                        <label class="block font-bold mb-2">Bottle Shape</label>
+                        <select id="bottle-shape" class="w-full px-4 py-2 border rounded">
+                            <option>Round</option>
+                            <option>Square</option>
+                            <option>Slim</option>
+                        </select>
                     </div>
-                    <div class="skill-category">
-                        <h3>Exam Knowledge</h3>
-                        <ul>
-                            <li>RRB, SSC syllabus familiarity</li>
-                        </ul>
+                    <div>
+                        <label class="block font-bold mb-2">Bottle Size</label>
+                        <select id="bottle-size" class="w-full px-4 py-2 border rounded">
+                            <option>250 ml</option>
+                            <option>500 ml</option>
+                            <option>1 Liter</option>
+                            <option>2 Liter</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-bold mb-2">Quantity</label>
+                        <input id="quantity" type="number" min="100" placeholder="Minimum 100" class="w-full px-4 py-2 border rounded">
                     </div>
                 </div>
+                <!-- 3D Preview -->
+                <div id="threejs-builder" class="w-full h-96 bg-[#EAEAEA] rounded"></div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Projects Section -->
-        <section id="projects" class="projects section reveal">
-            <div class="container">
-                <h2>Projects</h2>
-                <div class="projects-grid">
-                    <div class="project-card">
-                        <h3>BCA Notes Website</h3>
-                        <p>A simple website sharing BCA syllabus notes in easy language.</p>
-                        <p>Tech: HTML, CSS, JS</p>
-                        <a href="https://github.com/placeholder/bca-notes" target="_blank">GitHub</a>
-                        <a href="https://placeholder-live-demo.com" target="_blank">Live Demo</a>
-                    </div>
-                    <div class="project-card">
-                        <h3>OS Concepts Explainer</h3>
-                        <p>Interactive explainer for operating system concepts.</p>
-                        <p>Tech: HTML, CSS, JS</p>
-                        <a href="https://github.com/placeholder/os-explainer" target="_blank">GitHub</a>
-                        <a href="https://placeholder-live-demo.com" target="_blank">Live Demo</a>
-                    </div>
-                    <div class="project-card">
-                        <h3>Simple C Programs Repository</h3>
-                        <p>Collection of C programs demonstrating algorithms.</p>
-                        <p>Tech: C</p>
-                        <a href="https://github.com/placeholder/c-programs" target="_blank">GitHub</a>
-                    </div>
-                    <div class="project-card">
-
-<!-- Shreeram Bhajantri, [1/31/2026 6:53 PM] -->
-<h3>AI Chatbot (Future)</h3>
-                        <p>Planning an AI-based chatbot for educational queries.</p>
-                        <p>Tech: JS, AI APIs</p>
-                        <a href="https://github.com/placeholder/ai-chatbot" target="_blank">GitHub</a>
-                    </div>
+    <!-- Pricing Section: Cards with profit margins -->
+    <section id="pricing" class="py-20 bg-[#EAEAEA]">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-12">Pricing & Profits</h2>
+            <div class="grid md:grid-cols-4 gap-8">
+                <!-- 250ml -->
+                <div class="bg-white p-6 rounded shadow text-center">
+                    <h3 class="font-bold text-2xl mb-2">250 ml</h3>
+                    <p>Our Price: ₹7</p>
+                    <p>Sell at: ₹10</p>
+                    <p class="text-green-600 font-bold">Profit: ₹3/bottle</p>
+                </div>
+                <!-- 500ml -->
+                <div class="bg-white p-6 rounded shadow text-center">
+                    <h3 class="font-bold text-2xl mb-2">500 ml</h3>
+                    <p>Our Price: ₹15</p>
+                    <p>Sell at: ₹20</p>
+                    <p class="text-green-600 font-bold">Profit: ₹5/bottle</p>
+                </div>
+                <!-- 1L -->
+                <div class="bg-white p-6 rounded shadow text-center">
+                    <h3 class="font-bold text-2xl mb-2">1 Liter</h3>
+                    <p>Our Price: ₹20</p>
+                    <p>Sell at: ₹30</p>
+                    <p class="text-green-600 font-bold">Profit: ₹10/bottle</p>
+                </div>
+                <!-- 2L -->
+                <div class="bg-white p-6 rounded shadow text-center">
+                    <h3 class="font-bold text-2xl mb-2">2 Liter</h3>
+                    <p>Custom Quotation</p>
+                    <a href="#contact" class="text-[#0A6EFF] font-bold">Get Quote</a>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Exams Section -->
-        <section id="exams" class="exams section reveal">
-            <div class="container">
-                <h2>Competitive Exams Preparation</h2>
-                <p>Alongside my IT studies, I'm preparing for government competitive exams to secure a stable career path.</p>
-                <div class="exams-grid">
-                    <div class="exam-card">
-                        <h3>RRB NTPC</h3>
-                        <p>Focusing on general awareness, math, and reasoning for Railway Recruitment Board Non-Technical Popular Categories exam.</p>
-                    </div>
-                    <div class="exam-card">
-                        <h3>RRB Group D</h3>
-                        <p>Preparing for physical efficiency tests and written exams for Group D positions in Railways.</p>
-                    </div>
-                    <div class="exam-card">
-                        <h3>SSC Exams</h3>
-                        <p>Studying for Staff Selection Commission exams, emphasizing quantitative aptitude and English.</p>
-                    </div>
+    <!-- City Shop Network Section: Stats (Interactive map can be added with Leaflet if needed, but simple stats for now) -->
+    <section id="network" class="py-20 bg-white parallax" style="background-image: url('https://source.unsplash.com/random/1920x1080/?city');">
+        <div class="container mx-auto px-4 text-white text-center">
+            <h2 class="text-4xl font-bold mb-12">Join Our City Shop Network</h2>
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <p class="text-5xl font-bold">150+</p>
+                    <p>Bakeries</p>
                 </div>
-                <p>This preparation showcases my discipline and readiness for competitive environments.</p>
-            </div>
-        </section>
-
-        <!-- YouTube Section -->
-        <section id="youtube" class="youtube section reveal">
-            <div class="container">
-                <h2>YouTube & Content Creation</h2>
-                <p>I'm a YouTube content creator focusing on viral trends and educational content.</p>
-                <div class="youtube-grid">
-                    <div class="youtube-card">
-                        <h3>Viral Wave</h3>
-                        <p>Channel for trending and viral content.</p>
-                        <a href="https://youtube.com/placeholder-viral-wave" target="_blank">Visit Channel</a>
-                    </div>
-                    <div class="youtube-card">
-                        <h3>Educational BCA Channel</h3>
-                        <p>Explaining BCA syllabus in simple language.</p>
-                        <a href="https://youtube.com/placeholder-bca-edu" target="_blank">Visit Channel</a>
-                    </div>
+                <div>
+                    <p class="text-5xl font-bold">200+</p>
+                    <p>Hotels</p>
                 </div>
-                <p>Through content creation, I aim to share knowledge and engage with audiences.</p>
-            </div>
-        </section>
-
-        <!-- Contact Section -->
-        <section id="contact" class="contact section reveal">
-            <div class="container">
-                <h2>Contact Me</h2>
-                <form id="contact-form" action="https://formspree.io/f/your-form-id" method="POST"> <!-- Replace with actual Formspree ID -->
-                    <input type="text" name="name" placeholder="Your Name" required aria-label="Name">
-                    <input type="email" name="email" placeholder="Your Email" required aria-label="Email">
-                    <textarea name="message" placeholder="Your Message" required aria-label="Message"></textarea>
-                    <button type="submit" class="btn primary">Send Message</button>
-                </form>
-                <div id="form-status"></div>
-                <div class="social-links">
-                    <a href="https://youtube.com/placeholder" target="_blank" aria-label="YouTube"><span>YT</span></a>
-                    <a href="https://github.com/placeholder" target="_blank" aria-label="GitHub"><span>GH</span></a>
+                <div>
+                    <p class="text-5xl font-bold">100+</p>
+                    <p>Medical Stores</p>
+                </div>
+                <div>
+                    <p class="text-5xl font-bold">300+</p>
+                    <p>Grocery Shops</p>
                 </div>
             </div>
-        </section>
-    </main>
+            <a href="#contact" class="cta-button bg-[#0A6EFF] text-white px-6 py-3 rounded-full font-bold mt-8 inline-block">Join Shops in Your City</a>
+        </div>
+    </section>
 
-<!-- Shreeram Bhajantri, [1/31/2026 6:53 PM] -->
-<!-- Footer -->
-    <footer id="footer">
-        <div class="container">
-            <p>&copy; Shreeram Bhajantri – All Rights Reserved</p>
-            <div class="social-icons">
-                <a href="https://youtube.com/placeholder" target="_blank" aria-label="YouTube"><span>YT</span></a>
-                <a href="https://github.com/placeholder" target="_blank" aria-label="GitHub"><span>GH</span></a>
+    <!-- Why SeaWater Section: Animated feature cards -->
+    <section id="why" class="py-20 bg-[#EAEAEA]">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-12">Why Choose SeaWater?</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="bg-white p-6 rounded shadow animate-feature">
+                    <h3 class="font-bold text-xl mb-2">BIS-Certified Pure Water</h3>
+                    <p>Guaranteed purity for your customers.</p>
+                </div>
+                <!-- Feature 2 -->
+                <div class="bg-white p-6 rounded shadow animate-feature">
+                    <h3 class="font-bold text-xl mb-2">Food-Grade Bottles</h3>
+                    <p>Safe and high-quality materials.</p>
+                </div>
+                <!-- Feature 3 -->
+                <div class="bg-white p-6 rounded shadow animate-feature">
+                    <h3 class="font-bold text-xl mb-2">Affordable Wholesale</h3>
+                    <p>Maximize your profits.</p>
+                </div>
+                <!-- Feature 4 -->
+                <div class="bg-white p-6 rounded shadow animate-feature">
+                    <h3 class="font-bold text-xl mb-2">Free Branding Support</h3>
+                    <p>Easy customization.</p>
+                </div>
+                <!-- Feature 5 -->
+                <div class="bg-white p-6 rounded shadow animate-feature">
+                    <h3 class="font-bold text-xl mb-2">Fast Delivery</h3>
+                    <p>Quick turnaround times.</p>
+                </div>
+                <!-- Feature 6 -->
+                <div class="bg-white p-6 rounded shadow animate-feature">
+                    <h3 class="font-bold text-xl mb-2">Eco-Friendly Vision</h3>
+                    <p>Sustainable practices ahead.</p>
+                </div>
             </div>
-            <button id="back-to-top" aria-label="Back to Top">↑</button>
+        </div>
+    </section>
+
+    <!-- Gallery Section: Carousel with mockups -->
+    <section id="gallery" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-12">Gallery</h2>
+            <div class="grid md:grid-cols-3 gap-4">
+                <!-- Mockup 1 -->
+                <img src="https://source.unsplash.com/random/400x600/?water-bottle" alt="Renuka Pure Drinking Water" class="rounded hover:scale-105 transition-transform">
+                <!-- Mockup 2 -->
+                <img src="https://source.unsplash.com/random/400x600/?bottle" alt="Iyengar Drinking Water" class="rounded hover:scale-105 transition-transform">
+                <!-- Mockup 3 -->
+                <img src="https://source.unsplash.com/random/400x600/?drink" alt="Custom Bottle" class="rounded hover:scale-105 transition-transform">
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section: Fade-in animations -->
+    <section id="testimonials" class="py-20 bg-[#EAEAEA]">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-12">What Shop Owners Say</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="bg-white p-6 rounded shadow animate-fade-in">
+                    <p>"SeaWater boosted my brand visibility!"</p>
+                    <p class="font-bold mt-4">- Raj, Renuka Shop, Bengaluru</p>
+                </div>
+                <!-- Testimonial 2 -->
+                <div class="bg-white p-6 rounded shadow animate-fade-in">
+                    <p>"Affordable and high-quality service."</p>
+                    <p class="font-bold mt-4">- Priya, Iyengar Bakery, Mumbai</p>
+                </div>
+                <!-- Testimonial 3 -->
+                <div class="bg-white p-6 rounded shadow animate-fade-in">
+                    <p>"Easy customization and fast delivery."</p>
+                    <p class="font-bold mt-4">- Amit, Medical Store, Delhi</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact/Order Section: Form with WhatsApp -->
+    <section id="contact" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-12">Contact Us / Place Order</h2>
+            <form class="max-w-lg mx-auto space-y-4">
+                <input type="text" placeholder="Shop Name" class="w-full px-4 py-2 border rounded">
+                <input type="text" placeholder="City" class="w-full px-4 py-2 border rounded">
+                <input type="tel" placeholder="Phone Number" class="w-full px-4 py-2 border rounded">
+                <select class="w-full px-4 py-2 border rounded">
+                    <option>Bottle Size</option>
+                    <option>250 ml</option>
+                    <option>500 ml</option>
+                    <option>1 Liter</option>
+                    <option>2 Liter</option>
+                </select>
+                <input type="number" placeholder="Quantity" class="w-full px-4 py-2 border rounded">
+                <button type="submit" class="cta-button bg-[#0A6EFF] text-white w-full py-3 rounded font-bold">Submit Order</button>
+            </form>
+            <div class="text-center mt-8">
+                <a href="https://wa.me/1234567890" class="text-[#0A6EFF] font-bold">Chat on WhatsApp</a>
+                <br>
+                <a href="tel:+1234567890" class="text-[#0A6EFF] font-bold">Call Us</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-10 bg-[#0A6EFF] text-white text-center">
+        <p>SeaWater Pvt Ltd (Registration in progress)</p>
+        <div class="space-x-4 mt-4">
+            <a href="#" class="hover:underline">Privacy Policy</a>
+            <a href="#" class="hover:underline">Terms & Conditions</a>
+        </div>
+        <div class="space-x-4 mt-4">
+            <a href="https://twitter.com" target="_blank">Twitter</a>
+            <a href="https://facebook.com" target="_blank">Facebook</a>
+            <a href="https://instagram.com" target="_blank">Instagram</a>
         </div>
     </footer>
 
-    <script src="js/main.js"></script>
+    <!-- JavaScript for Animations and 3D -->
+    <script>
+        // GSAP Animations
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Animate steps on scroll
+        gsap.utils.toArray('.animate-step').forEach((step, i) => {
+            gsap.from(step, {
+                opacity: 0,
+                y: 50,
+                duration: 1,
+                delay: i * 0.2,
+                scrollTrigger: {
+                    trigger: '#how-it-works',
+                    start: 'top 80%',
+                }
+            });
+        });
+
+        // Animate features
+        gsap.utils.toArray('.animate-feature').forEach((feature, i) => {
+            gsap.from(feature, {
+                opacity: 0,
+                scale: 0.9,
+                duration: 0.8,
+                delay: i * 0.1,
+                scrollTrigger: {
+                    trigger: '#why',
+                    start: 'top 80%',
+                }
+            });
+        });
+
+        // Fade-in testimonials
+        gsap.utils.toArray('.animate-fade-in').forEach((testimonial, i) => {
+            gsap.from(testimonial, {
+                opacity: 0,
+                duration: 1,
+                delay: i * 0.3,
+                scrollTrigger: {
+                    trigger: '#testimonials',
+                    start: 'top 80%',
+                }
+            });
+        });
+
+        // 3D Bottle in Hero (Simple cylinder with texture)
+        function initThreeHero() {
+            const container = document.getElementById('threejs-hero');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            container.appendChild(renderer.domElement);
+
+            // Bottle geometry (cylinder)
+            const geometry = new THREE.CylinderGeometry(1, 1, 3, 32);
+            const material = new THREE.MeshBasicMaterial({ color: 0x00E5FF, transparent: true, opacity: 0.8 });
+            const bottle = new THREE.Mesh(geometry, material);
+            scene.add(bottle);
+
+            camera.position.z = 5;
+
+            // Dynamic label (simple text change simulation)
+            const labels = ['Renuka Pure Drinking Water', 'Iyengar Drinking Water', 'Your Shop Water'];
+            let labelIndex = 0;
+            setInterval(() => {
+                labelIndex = (labelIndex + 1) % labels.length;
+                // Simulate label change by rotating or color (actual texture update would require canvas texture)
+                bottle.rotation.y += Math.PI;
+            }, 3000);
+
+            function animate() {
+                requestAnimationFrame(animate);
+                bottle.rotation.y += 0.01;
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            // Resize handler
+            window.addEventListener('resize', () => {
+                camera.aspect = container.clientWidth / container.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container.clientWidth, container.clientHeight);
+            });
+        }
+        initThreeHero();
+
+        // 3D Bottle Builder (Interactive)
+        function initThreeBuilder() {
+            const container = document.getElementById('threejs-builder');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer();
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            container.appendChild(renderer.domElement);
+
+            // Bottle
+            let geometry = new THREE.CylinderGeometry(1, 1, 3, 32); // Default round
+            const material = new THREE.MeshBasicMaterial({ color: 0x00E5FF });
+            let bottle = new THREE.Mesh(geometry, material);
+            scene.add(bottle);
+
+            camera.position.z = 5;
+
+            // Controls listeners
+            const shopNameInput = document.getElementById('shop-name');
+            const logoUpload = document.getElementById('logo-upload');
+            const labelColor = document.getElementById('label-color');
+            const bottleShape = document.getElementById('bottle-shape');
+            const bottleSize = document.getElementById('bottle-size');
+
+            // Update color
+            labelColor.addEventListener('input', (e) => {
+                material.color.set(e.target.value);
+            });
+
+            // Update shape (simplified: change geometry)
+            bottleShape.addEventListener('change', (e) => {
+                scene.remove(bottle);
+                if (e.target.value === 'Round') {
+                    geometry = new THREE.CylinderGeometry(1, 1, 3, 32);
+                } else if (e.target.value === 'Square') {
+                    geometry = new THREE.BoxGeometry(2, 3, 2);
+                } else if (e.target.value === 'Slim') {
+                    geometry = new THREE.CylinderGeometry(0.8, 0.8, 4, 32);
+                }
+                bottle = new THREE.Mesh(geometry, material);
+                scene.add(bottle);
+            });
+
+            // Update size (scale)
+            bottleSize.addEventListener('change', (e) => {
+                let scale = 1;
+                if (e.target.value === '250 ml') scale = 0.5;
+                else if (e.target.value === '500 ml') scale = 0.75;
+                else if (e.target.value === '1 Liter') scale = 1;
+                else if (e.target.value === '2 Liter') scale = 1.5;
+                bottle.scale.set(scale, scale, scale);
+            });
+
+            // Logo upload (simple: log for now, actual would apply texture)
+            logoUpload.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        const texture = new THREE.TextureLoader().load(event.target.result);
+                        material.map = texture;
+                        material.needsUpdate = true;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Shop name (could overlay text, but simplified)
+            shopNameInput.addEventListener('input', (e) => {
+                console.log('Shop Name:', e.target.value); // For real: update texture with canvas text
+            });
+
+            // Mouse interaction for rotate/zoom
+            let isDragging = false;
+            let previousMouseX = 0;
+            let previousMouseY = 0;
+            container.addEventListener('mousedown', () => isDragging = true);
+            container.addEventListener('mouseup', () => isDragging = false);
+            container.addEventListener('mousemove', (e) => {
+                if (isDragging) {
+                    const deltaX = e.clientX - previousMouseX;
+                    const deltaY = e.clientY - previousMouseY;
+                    bottle.rotation.y += deltaX * 0.01;
+                    bottle.rotation.x += deltaY * 0.01;
+                    previousMouseX = e.clientX;
+                    previousMouseY = e.clientY;
+                }
+            });
+            container.addEventListener('wheel', (e) => {
+                camera.position.z += e.deltaY * 0.01;
+            });
+
+            function animate() {
+                requestAnimationFrame(animate);
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            // Resize
+            window.addEventListener('resize', () => {
+                camera.aspect = container.clientWidth / container.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container.clientWidth, container.clientHeight);
+            });
+        }
+        initThreeBuilder();
+
+        // Form submission (simulated)
+        document.querySelector('form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Order Submitted! We will contact you soon.');
+        });
+    </script>
+
 </body>
 </html>
-
-
-
