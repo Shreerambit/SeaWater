@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -122,7 +123,7 @@
         </div>
     </section>
 
-    <!-- Custom Bottle Builder Section: Interactive 3D -->
+    <!-- Custom Bottle Builder Section: Interactive 3D with advanced label texturing -->
     <section id="builder" class="py-20 bg-white">
         <div class="container mx-auto px-4">
             <h2 class="text-4xl font-bold text-center mb-12">Build Your Custom Bottle</h2>
@@ -152,7 +153,6 @@
                     <div>
                         <label class="block font-bold mb-2">Bottle Size</label>
                         <select id="bottle-size" class="w-full px-4 py-2 border rounded">
-                            <option>250 ml</option>
                             <option>500 ml</option>
                             <option>1 Liter</option>
                             <option>2 Liter</option>
@@ -169,43 +169,31 @@
         </div>
     </section>
 
-    <!-- Pricing Section: Cards with profit margins -->
+    <!-- Pricing Section: Updated with new prices, no profits shown -->
     <section id="pricing" class="py-20 bg-[#EAEAEA]">
         <div class="container mx-auto px-4">
-            <h2 class="text-4xl font-bold text-center mb-12">Pricing & Profits</h2>
-            <div class="grid md:grid-cols-4 gap-8">
-                <!-- 250ml -->
-                <div class="bg-white p-6 rounded shadow text-center">
-                    <h3 class="font-bold text-2xl mb-2">250 ml</h3>
-                    <p>Our Price: ₹7</p>
-                    <p>Sell at: ₹10</p>
-                    <p class="text-green-600 font-bold">Profit: ₹3/bottle</p>
-                </div>
+            <h2 class="text-4xl font-bold text-center mb-12">Wholesale Pricing</h2>
+            <div class="grid md:grid-cols-3 gap-8">
                 <!-- 500ml -->
                 <div class="bg-white p-6 rounded shadow text-center">
                     <h3 class="font-bold text-2xl mb-2">500 ml</h3>
-                    <p>Our Price: ₹15</p>
-                    <p>Sell at: ₹20</p>
-                    <p class="text-green-600 font-bold">Profit: ₹5/bottle</p>
+                    <p>Price: ₹7</p>
                 </div>
                 <!-- 1L -->
                 <div class="bg-white p-6 rounded shadow text-center">
                     <h3 class="font-bold text-2xl mb-2">1 Liter</h3>
-                    <p>Our Price: ₹20</p>
-                    <p>Sell at: ₹30</p>
-                    <p class="text-green-600 font-bold">Profit: ₹10/bottle</p>
+                    <p>Price: ₹15</p>
                 </div>
                 <!-- 2L -->
                 <div class="bg-white p-6 rounded shadow text-center">
                     <h3 class="font-bold text-2xl mb-2">2 Liter</h3>
-                    <p>Custom Quotation</p>
-                    <a href="#contact" class="text-[#0A6EFF] font-bold">Get Quote</a>
+                    <p>Price: ₹20</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- City Shop Network Section: Stats (Interactive map can be added with Leaflet if needed, but simple stats for now) -->
+    <!-- City Shop Network Section: Stats -->
     <section id="network" class="py-20 bg-white parallax" style="background-image: url('https://source.unsplash.com/random/1920x1080/?city');">
         <div class="container mx-auto px-4 text-white text-center">
             <h2 class="text-4xl font-bold mb-12">Join Our City Shop Network</h2>
@@ -319,7 +307,6 @@
                 <input type="tel" placeholder="Phone Number" class="w-full px-4 py-2 border rounded">
                 <select class="w-full px-4 py-2 border rounded">
                     <option>Bottle Size</option>
-                    <option>250 ml</option>
                     <option>500 ml</option>
                     <option>1 Liter</option>
                     <option>2 Liter</option>
@@ -328,7 +315,7 @@
                 <button type="submit" class="cta-button bg-[#0A6EFF] text-white w-full py-3 rounded font-bold">Submit Order</button>
             </form>
             <div class="text-center mt-8">
-                <a href="https://wa.me/+916364541826" class="text-[#0A6EFF] font-bold">Chat on WhatsApp</a>
+                <a href="https://wa.me/6364541826" class="text-[#0A6EFF] font-bold">Chat on WhatsApp</a>
                 <br>
                 <a href="tel:+916364541826" class="text-[#0A6EFF] font-bold">Call Us</a>
             </div>
@@ -395,7 +382,29 @@
             });
         });
 
-        // 3D Bottle in Hero (Simple cylinder with texture)
+        // Function to create label texture
+        function createLabelTexture(shopName, logoImg, labelColor) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 512;
+            canvas.height = 256;
+            const ctx = canvas.getContext('2d');
+            // Background
+            ctx.fillStyle = labelColor;
+            ctx.fillRect(0, 0, 512, 256);
+            // Logo if available
+            if (logoImg) {
+                const logoSize = 100;
+                ctx.drawImage(logoImg, 256 - logoSize / 2, 50, logoSize, logoSize);
+            }
+            // Text
+            ctx.font = 'bold 40px Inter, sans-serif';
+            ctx.fillStyle = '#FFFFFF';
+            ctx.textAlign = 'center';
+            ctx.fillText(shopName || 'Your Shop Pure Water', 256, 200);
+            return new THREE.CanvasTexture(canvas);
+        }
+
+        // 3D Bottle in Hero (with dynamic labels)
         function initThreeHero() {
             const container = document.getElementById('threejs-hero');
             const scene = new THREE.Scene();
@@ -404,21 +413,32 @@
             renderer.setSize(container.clientWidth, container.clientHeight);
             container.appendChild(renderer.domElement);
 
+            // Lights
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+            directionalLight.position.set(5, 5, 5);
+            scene.add(directionalLight);
+
             // Bottle geometry (cylinder)
             const geometry = new THREE.CylinderGeometry(1, 1, 3, 32);
-            const material = new THREE.MeshBasicMaterial({ color: 0x00E5FF, transparent: true, opacity: 0.8 });
+            const material = new THREE.MeshStandardMaterial({ color: 0xffffff });
             const bottle = new THREE.Mesh(geometry, material);
             scene.add(bottle);
 
             camera.position.z = 5;
 
-            // Dynamic label (simple text change simulation)
+            // Dynamic labels
             const labels = ['Renuka Pure Drinking Water', 'Iyengar Drinking Water', 'Your Shop Water'];
             let labelIndex = 0;
+            function updateHeroTexture() {
+                material.map = createLabelTexture(labels[labelIndex], null, '#0A6EFF');
+                material.needsUpdate = true;
+            }
+            updateHeroTexture();
             setInterval(() => {
                 labelIndex = (labelIndex + 1) % labels.length;
-                // Simulate label change by rotating or color (actual texture update would require canvas texture)
-                bottle.rotation.y += Math.PI;
+                updateHeroTexture();
             }, 3000);
 
             function animate() {
@@ -437,7 +457,7 @@
         }
         initThreeHero();
 
-        // 3D Bottle Builder (Interactive)
+        // 3D Bottle Builder (Interactive with advanced texturing)
         function initThreeBuilder() {
             const container = document.getElementById('threejs-builder');
             const scene = new THREE.Scene();
@@ -446,13 +466,34 @@
             renderer.setSize(container.clientWidth, container.clientHeight);
             container.appendChild(renderer.domElement);
 
+            // Lights
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+            directionalLight.position.set(5, 5, 5);
+            scene.add(directionalLight);
+
             // Bottle
             let geometry = new THREE.CylinderGeometry(1, 1, 3, 32); // Default round
-            const material = new THREE.MeshBasicMaterial({ color: 0x00E5FF });
+            const material = new THREE.MeshStandardMaterial({ color: 0xffffff });
             let bottle = new THREE.Mesh(geometry, material);
             scene.add(bottle);
 
             camera.position.z = 5;
+
+            // Variables for customization
+            let logoImg = null;
+            let currentShopName = '';
+            let currentLabelColor = '#0A6EFF';
+
+            // Update texture function
+            function updateTexture() {
+                material.map = createLabelTexture(currentShopName, logoImg, currentLabelColor);
+                material.needsUpdate = true;
+            }
+
+            // Initial texture
+            updateTexture();
 
             // Controls listeners
             const shopNameInput = document.getElementById('shop-name');
@@ -461,18 +502,44 @@
             const bottleShape = document.getElementById('bottle-shape');
             const bottleSize = document.getElementById('bottle-size');
 
-            // Update color
-            labelColor.addEventListener('input', (e) => {
-                material.color.set(e.target.value);
+            // Shop name change
+            shopNameInput.addEventListener('input', (e) => {
+                currentShopName = e.target.value;
+                updateTexture();
             });
 
-            // Update shape (simplified: change geometry)
+            // Logo upload
+            logoUpload.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        const img = new Image();
+                        img.src = event.target.result;
+                        img.onload = () => {
+                            logoImg = img;
+                            updateTexture();
+                        };
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Label color change
+            labelColor.addEventListener('input', (e) => {
+                currentLabelColor = e.target.value;
+                updateTexture();
+            });
+
+            // Update shape
             bottleShape.addEventListener('change', (e) => {
                 scene.remove(bottle);
+                let radius = 1;
+                let height = 3;
                 if (e.target.value === 'Round') {
-                    geometry = new THREE.CylinderGeometry(1, 1, 3, 32);
+                    geometry = new THREE.CylinderGeometry(radius, radius, height, 32);
                 } else if (e.target.value === 'Square') {
-                    geometry = new THREE.BoxGeometry(2, 3, 2);
+                    geometry = new THREE.BoxGeometry(2, height, 2);
                 } else if (e.target.value === 'Slim') {
                     geometry = new THREE.CylinderGeometry(0.8, 0.8, 4, 32);
                 }
@@ -483,37 +550,21 @@
             // Update size (scale)
             bottleSize.addEventListener('change', (e) => {
                 let scale = 1;
-                if (e.target.value === '250 ml') scale = 0.5;
-                else if (e.target.value === '500 ml') scale = 0.75;
+                if (e.target.value === '500 ml') scale = 0.75;
                 else if (e.target.value === '1 Liter') scale = 1;
                 else if (e.target.value === '2 Liter') scale = 1.5;
                 bottle.scale.set(scale, scale, scale);
-            });
-
-            // Logo upload (simple: log for now, actual would apply texture)
-            logoUpload.addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = (event) => {
-                        const texture = new THREE.TextureLoader().load(event.target.result);
-                        material.map = texture;
-                        material.needsUpdate = true;
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-
-            // Shop name (could overlay text, but simplified)
-            shopNameInput.addEventListener('input', (e) => {
-                console.log('Shop Name:', e.target.value); // For real: update texture with canvas text
             });
 
             // Mouse interaction for rotate/zoom
             let isDragging = false;
             let previousMouseX = 0;
             let previousMouseY = 0;
-            container.addEventListener('mousedown', () => isDragging = true);
+            container.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                previousMouseX = e.clientX;
+                previousMouseY = e.clientY;
+            });
             container.addEventListener('mouseup', () => isDragging = false);
             container.addEventListener('mousemove', (e) => {
                 if (isDragging) {
@@ -527,6 +578,7 @@
             });
             container.addEventListener('wheel', (e) => {
                 camera.position.z += e.deltaY * 0.01;
+                camera.position.z = Math.max(2, Math.min(10, camera.position.z));
             });
 
             function animate() {
@@ -553,5 +605,3 @@
 
 </body>
 </html>
-
-
